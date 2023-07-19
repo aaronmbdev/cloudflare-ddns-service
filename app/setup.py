@@ -23,7 +23,8 @@ class DDNSSetup:
             self.logger.warn("A config file already exists but it will be replaced with the latest information")
 
         data = {
-            "cloudflare_key": args.cloudflare_key,
+            "cloudflare_token": args.cloudflare_token,
+            "email": args.email,
             "domain" : args.domain
         }
 
