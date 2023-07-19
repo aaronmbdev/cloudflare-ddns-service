@@ -64,5 +64,4 @@ class LoggingManager:
         logger = logging.getLogger()
         logger.setLevel(level)
         logger.propagate = False
-        logger.info("Logging system configured successfully")
 
