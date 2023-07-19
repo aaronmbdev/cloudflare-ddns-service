@@ -17,8 +17,9 @@ class ArgsComposer:
         return parser
     
     def validate_args(args: argparse.ArgumentParser) -> bool:
+        logger = logging.getLogger("ddns")
         if args.command == "setup":
             if args.cloudflare_key == None or args.domain == None:
-                logging.error("You must specify a Cloudflare API Key and domain name to setup DDNS. Use ddns -h")
+                logger.error("You must specify a Cloudflare API Key and domain name to setup DDNS. Use ddns -h")
                 return False
         return True

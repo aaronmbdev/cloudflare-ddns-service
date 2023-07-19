@@ -7,9 +7,13 @@ class LoggingManager:
         self.__configure__()
         
     def __configure__(self) -> None:
-        logging.basicConfig(
-            stream = sys.stdout,
-            level = logging.INFO,
-            format = "%(levelname)s: %(asctime)s - %(message)s"
+        logger = logging.getLogger("ddns")
+        formatter = logging.Formatter(
+            "[%(asctime)s][%(name)s][%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S"
         )
-
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(formatter)
+        stream_handler.setLevel(logging.INFO)
+        logger.addHandler(stream_handler)
+        logger.propagate = False
+        logger.setLevel(logging.INFO)
