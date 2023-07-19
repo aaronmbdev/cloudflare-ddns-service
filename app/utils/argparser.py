@@ -1,6 +1,5 @@
-
 import argparse
-
+import logging
 
 class ArgsComposer:
     def get() -> argparse.ArgumentParser:
@@ -16,3 +15,10 @@ class ArgsComposer:
         setup.add_argument("--domain", type=str, required=False, help="Domain to keep updated")
 
         return parser
+    
+    def validate_args(args: argparse.ArgumentParser) -> bool:
+        if args.command == "setup":
+            if args.cloudflare_key == None or args.domain == None:
+                logging.error("You must specify a Cloudflare API Key and domain name to setup DDNS. Use ddns -h")
+                return False
+        return True
