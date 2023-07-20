@@ -9,7 +9,7 @@ The functionality is limited to only keep one domain updated using an A record.
 ### Setup Cloudflare account and domain to keep updated
 
 ```
-ddns setup --cloudflare-key XXXXX --domain abc.com
+ddns setup --cloudflare-token XXXXX --domain abc.com --subdomain xxx
 ```
 
 ### Start DDNS Service
