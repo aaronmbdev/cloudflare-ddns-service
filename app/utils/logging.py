@@ -1,6 +1,5 @@
 import logging.config
 import logging.handlers
-import sys
 
 class LoggingManager:
     def __init__(self) -> None:

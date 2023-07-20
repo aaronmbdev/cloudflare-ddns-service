@@ -24,8 +24,8 @@ class DDNSSetup:
 
         data = {
             "cloudflare_token": args.cloudflare_token,
-            "email": args.email,
-            "domain" : args.domain
+            "domain" : args.domain,
+            "subdomain": args.subdomain
         }
 
         json_str = json.dumps(data, indent=4)

@@ -6,7 +6,7 @@ class ConfigReader:
     def __init__(self) -> None:
         self.CONFIG_PATH = "config/config.json"
         self.logger = logging.getLogger("ddns")
-        self.required_keys = {"cloudflare_token", "email", "domain"}
+        self.required_keys = {"cloudflare_token", "domain", "subdomain"}
 
     def read_config(self) -> dict:
         self.logger.info("Reading configuration file")

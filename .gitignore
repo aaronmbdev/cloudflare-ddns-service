@@ -1,3 +1,5 @@
 venv/
 config/
 *__pycache__*
+build/
+ddns.egg-info/
