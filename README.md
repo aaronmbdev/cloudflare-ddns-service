@@ -5,6 +5,19 @@ The functionality is limited to only keep one domain updated using an A record.
 
 ## Usage
 
+### Recommended - Setup a virtual environment to get started
+This project was build using 3.10
+
+```
+python -m venv venv
+```
+
+### Install dependencies
+
+```
+pip install .
+```
+
 
 ### Setup Cloudflare account and domain to keep updated
 
