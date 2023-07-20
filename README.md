@@ -31,3 +31,36 @@ Once the service is configured, we can start the ddns service
 ```
 ddns start
 ```
+
+
+## Usage from Docker image - No install required
+
+### First we need to create a config file
+We will add this content to config.json
+```
+{
+    "cloudflare_token": "XXXXX",
+    "domain": "google.com",
+    "subdomain": "storage"
+}
+```
+
+With this file we will be setting the configuration for storage.google.com
+
+### Use docker-compose to launch the service from the latest avaiable version
+Contents of the docker-compose.yaml
+
+```
+version: '3.8'
+
+services:
+  ddns-run:
+    image: ghcr.io/aaronmbdev/cloudflare-ddns-service:latest
+    command: start
+    volumes:
+      - ./config.json:/usr/src/app/config/config.json
+    restart: always
+
+```
+
+Then we only need to use docker-compose up to start the service. Use -d to start it in the background and leave it enabled.

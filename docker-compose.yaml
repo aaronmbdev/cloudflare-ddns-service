@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  ddns-run:
+    image: ghcr.io/aaronmbdev/cloudflare-ddns-service:latest
+    command: start
+    volumes:
+      - ./config/config.json:/usr/src/app/config/config.json
+    restart: always
