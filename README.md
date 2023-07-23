@@ -29,7 +29,7 @@ ddns setup --cloudflare-token XXXXX --domain abc.com --subdomain xxx
 Once the service is configured, we can start the ddns service
 
 ```
-ddns start
+ddns start [--no-proxy]
 ```
 
 

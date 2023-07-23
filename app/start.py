@@ -9,11 +9,12 @@ from app.services.ip_retriever import IPRetriever
 
 
 class DDNSStart:
-    def __init__(self) -> None:
+    def __init__(self, args) -> None:
         self.logger = logging.getLogger("ddns")
         self.logger.info("Starting DDNS Service")
         self.cloudflare = CloudflareService(ConfigReader().read_config())
         self.ip_retriever = IPRetriever()
+        self.proxy = False if args.no_proxy else True
 
     def __launch_service__(self):
         while True:
@@ -25,7 +26,7 @@ class DDNSStart:
             
             if records["value"] != current_ip:
                 self.logger.info("The IP Address has changed and is not equal to the DNS record. Updating...")
-                self.cloudflare.update_subdomain_record(current_ip, records["id"])
+                self.cloudflare.update_subdomain_record(current_ip, records["id"], self.proxy)
                 self.logger.info("Value updated in Cloudflare successfully")
             else:
                 self.logger.info("The IP Adress is equal to the value of the DNS record. No changes are required")

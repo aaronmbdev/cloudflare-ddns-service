@@ -39,11 +39,11 @@ class CloudflareService:
             }
         return None
     
-    def update_subdomain_record(self, new_value: str, record_id: str) -> Any:
+    def update_subdomain_record(self, new_value: str, record_id: str, proxy: bool) -> Any:
         full_name = f"{self.subdomain}.{self.domain}"
         return self.client.zones.dns_records.put(self.zone_id, record_id, data = {
             "name": full_name,
             "type": "A",
             "content": new_value,
-            "proxied": True
+            "proxied": proxy
         })

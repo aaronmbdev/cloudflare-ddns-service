@@ -14,6 +14,7 @@ class ArgsComposer:
         setup.add_argument("--cloudflare-token", type=str, required=False, help="Cloudflare API Token")
         setup.add_argument("--domain", type=str, required=False, help="Domain to keep updated")
         setup.add_argument("--subdomain", type=str, required=False, help="Subdomain that must be kept updated")
+        setup.add_argument("--no-proxy", action="store_true", help="Set if domain must be proxied")
         return parser
     
     def validate_args(self, args: argparse.ArgumentParser) -> bool:

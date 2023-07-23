@@ -16,7 +16,7 @@ def main():
         DDNSSetup().setup_ddns_service(args)
 
     if args.command == "start":
-        DDNSStart().launch()
+        DDNSStart(args).launch()
     
 
 if __name__ == "__main__":
