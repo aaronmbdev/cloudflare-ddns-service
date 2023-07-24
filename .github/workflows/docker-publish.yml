@@ -23,7 +23,7 @@ jobs:
           git config user.name "[Github automation]"
           git config user.email "aaron@mbotton.com"
           git commit -m "Bump version to $new_version"
-          echo "::set-output name=new_version::$new_version"
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
           git push
   build-and-push:
     needs: bump_version
@@ -39,5 +39,5 @@ jobs:
     
     - name: 'Build and push image'
       run: |
-        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:${{ needs.bump_version.outputs.new_version }}
-        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:${{ needs.bump_version.outputs.new_version }}
+        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:$NEW_VERSION
+        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:$NEW_VERSION
