@@ -16,7 +16,6 @@ jobs:
         run: pip install semantic-version
       - name: Bump version and commit changes
         id: bump_version
-        shell: bash-wrapper {0}
         run: |
           current_version=$(python -c "import app.__version__ as v; print(v.__version__)")
           new_version=$(python -c "from semantic_version import Version; print(Version('$current_version').next_patch())")
