@@ -15,6 +15,8 @@ jobs:
       - name: Install semantic versioning
         run: pip install semantic-version
       - name: Bump version and commit changes
+        env:
+            GITHUB_TOKEN: ${{ secrets.DDNS_GHCR_TOKEN }} 
         run: |
           current_version=$(python -c "import app.__version__ as v; print(v.__version__)")
           new_version=$(python -c "from semantic_version import Version; print(Version('$current_version').next_patch())")
