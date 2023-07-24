@@ -6,6 +6,8 @@ on:
 jobs:
   bump_version:
     runs-on: ubuntu-latest
+    outputs:
+      NEW_VERSION: ${{ steps.bump_version.outputs.NEW_VERSION }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup Python
@@ -24,7 +26,7 @@ jobs:
           git config user.name "[Github automation]"
           git config user.email "aaron@mbotton.com"
           git commit -m "Bump version to $new_version"
-          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+          echo "NEW_VERSION=$new_version" >> $GITHUB_OUTPUT
           git push
   build-and-push:
     needs: bump_version
@@ -40,5 +42,5 @@ jobs:
     
     - name: 'Build and push image'
       run: |
-        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:${{env.NEW_VERSION}}
-        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:${{env.NEW_VERSION}}
+        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:${{needs.bump_version.outputs.NEW_VERSION}}
+        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:${{needs.bump_version.outputs.NEW_VERSION}}
