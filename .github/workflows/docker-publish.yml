@@ -40,5 +40,5 @@ jobs:
     
     - name: 'Build and push image'
       run: |
-        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:$NEW_VERSION
-        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:$NEW_VERSION
+        docker build . --tag ghcr.io/aaronmbdev/cloudflare-ddns-service:${{env.NEW_VERSION}}
+        docker push ghcr.io/aaronmbdev/cloudflare-ddns-service:${{env.NEW_VERSION}}
