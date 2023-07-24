@@ -19,6 +19,7 @@ jobs:
           current_version=$(python -c "import app.__version__ as v; print(v.__version__)")
           new_version=$(python -c "from semantic_version import Version; print(Version('$current_version').next_patch())")
           sed -i -E "s/__version__ = \"[^\"]+\"/__version__ = \"$new_version\"/" app/__version__.py
+          git add app/__version__.py
           git config user.name "[Github automation]"
           git config user.email "aaron@mbotton.com"
           git commit -m "Bump version to $new_version"
