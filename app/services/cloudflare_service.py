@@ -7,7 +7,7 @@ class CloudflareService:
     def __init__(self, config: dict) -> None:
         self.logger = logging.getLogger("ddns")
         self.domain = config["domain"]
-        self.subdomain = config["subdomain"]
+        self.subdomains = config["subdomains"]
         self.client = CloudFlare.CloudFlare(
             token=config["cloudflare_token"]
         )
@@ -21,29 +21,38 @@ class CloudflareService:
         self.logger.info(f"Domain found in the account with zone id '{self.zone_id}'")
         
 
-    def get_subdomain_records(self) -> Any:
-        full_name = f"{self.subdomain}.{self.domain}"
-        self.logger.info(f"Checking current DNS values for {full_name}")
-        dns_records = self.client.zones.dns_records.get(self.zone_id)
-        
-        matching_record = [
-            record for record in dns_records
-            if record["name"] == full_name and record["type"] == "A"
-        ]
-
-        if len(matching_record) > 0:
-            return {
-                "id" : matching_record[0]["id"],
-                "domain": matching_record[0]["name"],
-                "value": matching_record[0]["content"]
-            }
-        return None
+    def get_subdomain_records(self) -> list:
+        return self.client.zones.dns_records.get(self.zone_id)
     
-    def update_subdomain_record(self, new_value: str, record_id: str, proxy: bool) -> Any:
-        full_name = f"{self.subdomain}.{self.domain}"
+
+    def records_to_update(self, records):
+        filtered = list(
+            filter(lambda x: any(f["name"] == x["name"] for f in self.subdomains), records)
+        )
+        return filtered
+    
+    def update_subdomain_record(self, new_value: str, record_id: str, subdomain: str) -> Any:
+        proxied = self.__find_proxy_config_for_subdomain__(subdomain=subdomain)
+        self.logger.info(f"Attempting to update records for {subdomain} with value {new_value} and proxy: '{proxied}'")
         return self.client.zones.dns_records.put(self.zone_id, record_id, data = {
-            "name": full_name,
+            "name": subdomain,
             "type": "A",
             "content": new_value,
-            "proxied": proxy
+            "proxied": proxied
         })
+    
+    def __find_proxy_config_for_subdomain__(self, subdomain: str) -> bool:
+        proxy = True
+        matching_config = [
+            saved_subdomain for saved_subdomain in self.subdomains 
+            if saved_subdomain["name"] == subdomain
+        ]
+        if len(matching_config) > 0:
+            proxy_config = matching_config[0]["proxy"]
+            self.logger.info(f"Found proxy configuration for subdomain {subdomain}: {proxy_config}")
+            proxy = proxy_config
+        else:
+            self.logger.info(f"The proxy configuration for subdomain {subdomain} is missing. Using default: true")
+
+        return proxy
+

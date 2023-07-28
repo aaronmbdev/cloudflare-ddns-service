@@ -14,23 +14,20 @@ class DDNSStart:
         self.logger.info("Starting DDNS Service")
         self.cloudflare = CloudflareService(ConfigReader().read_config())
         self.ip_retriever = IPRetriever()
-        self.proxy = False if args.no_proxy else True
 
     def __launch_service__(self):
         while True:
-            records = self.cloudflare.get_subdomain_records()
+            all_records = self.cloudflare.get_subdomain_records()
+            records_to_update = self.cloudflare.records_to_update(all_records)
             current_ip = self.ip_retriever.find()
 
-            if records is None:
-                raise ValueError("There was an error trying to retrieve the DNS values of the subdomain")
-            
-            if records["value"] != current_ip:
-                self.logger.info("The IP Address has changed and is not equal to the DNS record. Updating...")
-                self.cloudflare.update_subdomain_record(current_ip, records["id"], self.proxy)
+            for record in records_to_update:
+                record_id = record["id"]
+                subdomain = record["name"]
+                record_value = record["content"]
+                self.logger.info(f"The IP Address for {subdomain} changed. {current_ip} != {record_value}. Update in progress")
+                self.cloudflare.update_subdomain_record(current_ip, record_id, subdomain)
                 self.logger.info("Value updated in Cloudflare successfully")
-            else:
-                self.logger.info("The IP Adress is equal to the value of the DNS record. No changes are required")
-            
             time.sleep(600)
 
 

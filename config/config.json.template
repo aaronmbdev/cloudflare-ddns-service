@@ -1,0 +1,10 @@
+{
+    "cloudflare_token": "XXXXX",
+    "domain": "missio.media",
+    "subdomains": [
+        {
+            "name": "storage",
+            "proxy": false
+        }
+    ]
+}
