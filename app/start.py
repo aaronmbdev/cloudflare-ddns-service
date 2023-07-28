@@ -23,9 +23,9 @@ class DDNSStart:
 
             for record in records_to_update:
                 record_value = record["content"]
+                subdomain = record["name"]
                 if record_value != current_ip:
                     record_id = record["id"]
-                    subdomain = record["name"]
                     self.logger.info(f"The IP Address for {subdomain} changed. {current_ip} != {record_value}. Update in progress")
                     self.cloudflare.update_subdomain_record(current_ip, record_id, subdomain)
                     self.logger.info("Value updated in Cloudflare successfully")
